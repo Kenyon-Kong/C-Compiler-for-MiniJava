@@ -1,4 +1,4 @@
-##Documentation for CS 352 - Compiler projects
+## Documentation for CS 352 - Compiler projects
 
 ## Project 2
  In project 2, I implement a bottom up parser capable of type-checking. In this project, I use Lex and Yacc to detect the input file and build the grammar. While Yacc recognizes the grammar, I will also build the Abstract Syntax Tree on the way. Then I write a C program to implement type-checking, with the help of the AST. I traverse the AST two times for checking re-declaration as well as types-mismatch, and details will be explained later.
