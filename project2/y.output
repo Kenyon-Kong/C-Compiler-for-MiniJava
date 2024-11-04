@@ -1,0 +1,2726 @@
+Grammar
+
+    0 $accept: Program $end
+
+    1 Program: MainClass
+
+    2 MainClass: KW_CLASS ID '{' StaticVarDeclList StaticMethodDeclList MainMethod '}'
+
+    3 MainMethod: KW_PUBLIC KW_STATIC KW_VOID MAIN '(' KW_STRING '[' ']' ID ')' '{' StatementList '}'
+
+    4 StaticVarDeclList: StaticVarDeclList StaticVarDecl
+    5                  | EmptyRule
+
+    6 StaticMethodDeclList: StaticMethodDeclList StaticMethodDecl
+    7                     | EmptyRule
+
+    8 StatementList: StatementList Statement
+    9              | EmptyRule
+
+   10 VarDecl: Type ID VarInit MoreVar ';'
+
+   11 VarInit: '=' Exp
+   12        | EmptyRule
+
+   13 MoreVar: MoreVar ',' ID VarInit
+   14        | EmptyRule
+
+   15 StaticVarDecl: KW_PRIVATE KW_STATIC VarDecl
+
+   16 StaticMethodDecl: KW_PUBLIC KW_STATIC Type ID '(' FormalHead ')' '{' StatementList '}'
+
+   17 FormalHead: FormalList
+   18           | EmptyRule
+
+   19 FormalList: Type ID FormalTail
+
+   20 FormalTail: ',' Type ID FormalTail
+   21           | EmptyRule
+
+   22 Type: PrimeType
+   23     | Type '[' ']'
+
+   24 PrimeType: KW_INT
+   25          | KW_BOOLEAN
+   26          | KW_STRING
+
+   27 Statement: VarDecl
+   28          | '{' StatementList '}'
+   29          | KW_IF '(' Exp ')' Statement KW_ELSE Statement
+   30          | KW_WHILE '(' Exp ')' Statement
+   31          | SYSTEM_OUT_PRINTLN '(' Exp ')' ';'
+   32          | SYSTEM_OUT_PRINT '(' Exp ')' ';'
+   33          | LeftValue '=' Exp ';'
+   34          | KW_RETURN Exp ';'
+   35          | MethodCall ';'
+
+   36 MethodCall: ID '(' ExpHead ')'
+   37           | INTEGER_PARSEINT '(' Exp ')'
+
+   38 ExpHead: Explist
+   39        | EmptyRule
+
+   40 Exp: Exp TOK_AND Exp
+   41    | Exp TOK_OR Exp
+   42    | Exp '<' Exp
+   43    | Exp '>' Exp
+   44    | Exp TOK_LESSEQL Exp
+   45    | Exp TOK_GREATEQL Exp
+   46    | Exp TOK_EQUAL Exp
+   47    | Exp TOK_NOTEQL Exp
+   48    | Exp '+' Exp
+   49    | Exp '-' Exp
+   50    | Exp '*' Exp
+   51    | Exp '/' Exp
+   52    | '!' Exp
+   53    | '+' Exp
+   54    | '-' Exp
+   55    | '(' Exp ')'
+   56    | LeftValue '.' KW_LENGTH
+   57    | LeftValue
+   58    | MethodCall
+   59    | KW_NEW PrimeType Index
+   60    | INTEGER_LITERAL
+   61    | STRING_LITERAL
+   62    | KW_TRUE
+   63    | KW_FALSE
+
+   64 Index: '[' Exp ']'
+   65      | '[' Exp ']' '[' Exp ']'
+
+   66 Explist: Exp ExpTail
+
+   67 ExpTail: ExpTail ',' Exp
+   68        | EmptyRule
+
+   69 LeftValue: ID
+   70          | ID '[' Exp ']'
+   71          | ID '[' Exp ']' '[' Exp ']'
+
+   72 EmptyRule: %empty
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    '!' (33) 52
+    '(' (40) 3 16 29 30 31 32 36 37 55
+    ')' (41) 3 16 29 30 31 32 36 37 55
+    '*' (42) 50
+    '+' (43) 48 53
+    ',' (44) 13 20 67
+    '-' (45) 49 54
+    '.' (46) 56
+    '/' (47) 51
+    ';' (59) 10 31 32 33 34 35
+    '<' (60) 42
+    '=' (61) 11 33
+    '>' (62) 43
+    '[' (91) 3 23 64 65 70 71
+    ']' (93) 3 23 64 65 70 71
+    '{' (123) 2 3 16 28
+    '}' (125) 2 3 16 28
+    error (256)
+    KW_BOOLEAN (258) 25
+    KW_CLASS (259) 2
+    KW_FALSE (260) 63
+    KW_INT (261) 24
+    MAIN (262) 3
+    KW_PUBLIC (263) 3 16
+    KW_TRUE (264) 62
+    KW_VOID (265) 3
+    KW_STATIC (266) 3 15 16
+    KW_STRING (267) 3 26
+    SYSTEM_OUT_PRINT (268) 32
+    SYSTEM_OUT_PRINTLN (269) 31
+    KW_PRIVATE (270) 15
+    KW_IF (271) 29
+    KW_ELSE (272) 29
+    KW_WHILE (273) 30
+    KW_RETURN (274) 34
+    INTEGER_PARSEINT (275) 37
+    KW_LENGTH (276) 56
+    KW_NEW (277) 59
+    TOK_AND (278) 40
+    TOK_OR (279) 41
+    TOK_LESSEQL (280) 44
+    TOK_GREATEQL (281) 45
+    TOK_EQUAL (282) 46
+    TOK_NOTEQL (283) 47
+    INTEGER_LITERAL <integer> (284) 60
+    STRING_LITERAL <string> (285) 61
+    ID <string> (286) 2 3 10 13 16 19 20 36 69 70 71
+
+
+Nonterminals, with rules where they appear
+
+    $accept (49)
+        on left: 0
+    Program <node> (50)
+        on left: 1
+        on right: 0
+    MainClass <node> (51)
+        on left: 2
+        on right: 1
+    MainMethod <node> (52)
+        on left: 3
+        on right: 2
+    StaticVarDeclList <node> (53)
+        on left: 4 5
+        on right: 2 4
+    StaticMethodDeclList <node> (54)
+        on left: 6 7
+        on right: 2 6
+    StatementList <node> (55)
+        on left: 8 9
+        on right: 3 8 16 28
+    VarDecl <node> (56)
+        on left: 10
+        on right: 15 27
+    VarInit <node> (57)
+        on left: 11 12
+        on right: 10 13
+    MoreVar <node> (58)
+        on left: 13 14
+        on right: 10 13
+    StaticVarDecl <node> (59)
+        on left: 15
+        on right: 4
+    StaticMethodDecl <node> (60)
+        on left: 16
+        on right: 6
+    FormalHead <node> (61)
+        on left: 17 18
+        on right: 16
+    FormalList <node> (62)
+        on left: 19
+        on right: 17
+    FormalTail <node> (63)
+        on left: 20 21
+        on right: 19 20
+    Type <node> (64)
+        on left: 22 23
+        on right: 10 16 19 20 23
+    PrimeType <node> (65)
+        on left: 24 25 26
+        on right: 22 59
+    Statement <node> (66)
+        on left: 27 28 29 30 31 32 33 34 35
+        on right: 8 29 30
+    MethodCall <node> (67)
+        on left: 36 37
+        on right: 35 58
+    ExpHead <node> (68)
+        on left: 38 39
+        on right: 36
+    Exp <node> (69)
+        on left: 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63
+        on right: 11 29 30 31 32 33 34 37 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 64 65 66 67 70 71
+    Index <node> (70)
+        on left: 64 65
+        on right: 59
+    Explist <node> (71)
+        on left: 66
+        on right: 38
+    ExpTail <node> (72)
+        on left: 67 68
+        on right: 66 67
+    LeftValue <node> (73)
+        on left: 69 70 71
+        on right: 33 56 57
+    EmptyRule <node> (74)
+        on left: 72
+        on right: 5 7 9 12 14 18 21 39 68
+
+
+State 0
+
+    0 $accept: . Program $end
+
+    KW_CLASS  shift, and go to state 1
+
+    Program    go to state 2
+    MainClass  go to state 3
+
+
+State 1
+
+    2 MainClass: KW_CLASS . ID '{' StaticVarDeclList StaticMethodDeclList MainMethod '}'
+
+    ID  shift, and go to state 4
+
+
+State 2
+
+    0 $accept: Program . $end
+
+    $end  shift, and go to state 5
+
+
+State 3
+
+    1 Program: MainClass .
+
+    $default  reduce using rule 1 (Program)
+
+
+State 4
+
+    2 MainClass: KW_CLASS ID . '{' StaticVarDeclList StaticMethodDeclList MainMethod '}'
+
+    '{'  shift, and go to state 6
+
+
+State 5
+
+    0 $accept: Program $end .
+
+    $default  accept
+
+
+State 6
+
+    2 MainClass: KW_CLASS ID '{' . StaticVarDeclList StaticMethodDeclList MainMethod '}'
+
+    $default  reduce using rule 72 (EmptyRule)
+
+    StaticVarDeclList  go to state 7
+    EmptyRule          go to state 8
+
+
+State 7
+
+    2 MainClass: KW_CLASS ID '{' StaticVarDeclList . StaticMethodDeclList MainMethod '}'
+    4 StaticVarDeclList: StaticVarDeclList . StaticVarDecl
+
+    KW_PRIVATE  shift, and go to state 9
+
+    $default  reduce using rule 72 (EmptyRule)
+
+    StaticMethodDeclList  go to state 10
+    StaticVarDecl         go to state 11
+    EmptyRule             go to state 12
+
+
+State 8
+
+    5 StaticVarDeclList: EmptyRule .
+
+    $default  reduce using rule 5 (StaticVarDeclList)
+
+
+State 9
+
+   15 StaticVarDecl: KW_PRIVATE . KW_STATIC VarDecl
+
+    KW_STATIC  shift, and go to state 13
+
+
+State 10
+
+    2 MainClass: KW_CLASS ID '{' StaticVarDeclList StaticMethodDeclList . MainMethod '}'
+    6 StaticMethodDeclList: StaticMethodDeclList . StaticMethodDecl
+
+    KW_PUBLIC  shift, and go to state 14
+
+    MainMethod        go to state 15
+    StaticMethodDecl  go to state 16
+
+
+State 11
+
+    4 StaticVarDeclList: StaticVarDeclList StaticVarDecl .
+
+    $default  reduce using rule 4 (StaticVarDeclList)
+
+
+State 12
+
+    7 StaticMethodDeclList: EmptyRule .
+
+    $default  reduce using rule 7 (StaticMethodDeclList)
+
+
+State 13
+
+   15 StaticVarDecl: KW_PRIVATE KW_STATIC . VarDecl
+
+    KW_BOOLEAN  shift, and go to state 17
+    KW_INT      shift, and go to state 18
+    KW_STRING   shift, and go to state 19
+
+    VarDecl    go to state 20
+    Type       go to state 21
+    PrimeType  go to state 22
+
+
+State 14
+
+    3 MainMethod: KW_PUBLIC . KW_STATIC KW_VOID MAIN '(' KW_STRING '[' ']' ID ')' '{' StatementList '}'
+   16 StaticMethodDecl: KW_PUBLIC . KW_STATIC Type ID '(' FormalHead ')' '{' StatementList '}'
+
+    KW_STATIC  shift, and go to state 23
+
+
+State 15
+
+    2 MainClass: KW_CLASS ID '{' StaticVarDeclList StaticMethodDeclList MainMethod . '}'
+
+    '}'  shift, and go to state 24
+
+
+State 16
+
+    6 StaticMethodDeclList: StaticMethodDeclList StaticMethodDecl .
+
+    $default  reduce using rule 6 (StaticMethodDeclList)
+
+
+State 17
+
+   25 PrimeType: KW_BOOLEAN .
+
+    $default  reduce using rule 25 (PrimeType)
+
+
+State 18
+
+   24 PrimeType: KW_INT .
+
+    $default  reduce using rule 24 (PrimeType)
+
+
+State 19
+
+   26 PrimeType: KW_STRING .
+
+    $default  reduce using rule 26 (PrimeType)
+
+
+State 20
+
+   15 StaticVarDecl: KW_PRIVATE KW_STATIC VarDecl .
+
+    $default  reduce using rule 15 (StaticVarDecl)
+
+
+State 21
+
+   10 VarDecl: Type . ID VarInit MoreVar ';'
+   23 Type: Type . '[' ']'
+
+    ID   shift, and go to state 25
+    '['  shift, and go to state 26
+
+
+State 22
+
+   22 Type: PrimeType .
+
+    $default  reduce using rule 22 (Type)
+
+
+State 23
+
+    3 MainMethod: KW_PUBLIC KW_STATIC . KW_VOID MAIN '(' KW_STRING '[' ']' ID ')' '{' StatementList '}'
+   16 StaticMethodDecl: KW_PUBLIC KW_STATIC . Type ID '(' FormalHead ')' '{' StatementList '}'
+
+    KW_BOOLEAN  shift, and go to state 17
+    KW_INT      shift, and go to state 18
+    KW_VOID     shift, and go to state 27
+    KW_STRING   shift, and go to state 19
+
+    Type       go to state 28
+    PrimeType  go to state 22
+
+
+State 24
+
+    2 MainClass: KW_CLASS ID '{' StaticVarDeclList StaticMethodDeclList MainMethod '}' .
+
+    $default  reduce using rule 2 (MainClass)
+
+
+State 25
+
+   10 VarDecl: Type ID . VarInit MoreVar ';'
+
+    '='  shift, and go to state 29
+
+    $default  reduce using rule 72 (EmptyRule)
+
+    VarInit    go to state 30
+    EmptyRule  go to state 31
+
+
+State 26
+
+   23 Type: Type '[' . ']'
+
+    ']'  shift, and go to state 32
+
+
+State 27
+
+    3 MainMethod: KW_PUBLIC KW_STATIC KW_VOID . MAIN '(' KW_STRING '[' ']' ID ')' '{' StatementList '}'
+
+    MAIN  shift, and go to state 33
+
+
+State 28
+
+   16 StaticMethodDecl: KW_PUBLIC KW_STATIC Type . ID '(' FormalHead ')' '{' StatementList '}'
+   23 Type: Type . '[' ']'
+
+    ID   shift, and go to state 34
+    '['  shift, and go to state 26
+
+
+State 29
+
+   11 VarInit: '=' . Exp
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 47
+    LeftValue   go to state 48
+
+
+State 30
+
+   10 VarDecl: Type ID VarInit . MoreVar ';'
+
+    $default  reduce using rule 72 (EmptyRule)
+
+    MoreVar    go to state 49
+    EmptyRule  go to state 50
+
+
+State 31
+
+   12 VarInit: EmptyRule .
+
+    $default  reduce using rule 12 (VarInit)
+
+
+State 32
+
+   23 Type: Type '[' ']' .
+
+    $default  reduce using rule 23 (Type)
+
+
+State 33
+
+    3 MainMethod: KW_PUBLIC KW_STATIC KW_VOID MAIN . '(' KW_STRING '[' ']' ID ')' '{' StatementList '}'
+
+    '('  shift, and go to state 51
+
+
+State 34
+
+   16 StaticMethodDecl: KW_PUBLIC KW_STATIC Type ID . '(' FormalHead ')' '{' StatementList '}'
+
+    '('  shift, and go to state 52
+
+
+State 35
+
+   63 Exp: KW_FALSE .
+
+    $default  reduce using rule 63 (Exp)
+
+
+State 36
+
+   62 Exp: KW_TRUE .
+
+    $default  reduce using rule 62 (Exp)
+
+
+State 37
+
+   37 MethodCall: INTEGER_PARSEINT . '(' Exp ')'
+
+    '('  shift, and go to state 53
+
+
+State 38
+
+   59 Exp: KW_NEW . PrimeType Index
+
+    KW_BOOLEAN  shift, and go to state 17
+    KW_INT      shift, and go to state 18
+    KW_STRING   shift, and go to state 19
+
+    PrimeType  go to state 54
+
+
+State 39
+
+   60 Exp: INTEGER_LITERAL .
+
+    $default  reduce using rule 60 (Exp)
+
+
+State 40
+
+   61 Exp: STRING_LITERAL .
+
+    $default  reduce using rule 61 (Exp)
+
+
+State 41
+
+   36 MethodCall: ID . '(' ExpHead ')'
+   69 LeftValue: ID .
+   70          | ID . '[' Exp ']'
+   71          | ID . '[' Exp ']' '[' Exp ']'
+
+    '('  shift, and go to state 55
+    '['  shift, and go to state 56
+
+    $default  reduce using rule 69 (LeftValue)
+
+
+State 42
+
+   53 Exp: '+' . Exp
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 57
+    LeftValue   go to state 48
+
+
+State 43
+
+   54 Exp: '-' . Exp
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 58
+    LeftValue   go to state 48
+
+
+State 44
+
+   52 Exp: '!' . Exp
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 59
+    LeftValue   go to state 48
+
+
+State 45
+
+   55 Exp: '(' . Exp ')'
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 60
+    LeftValue   go to state 48
+
+
+State 46
+
+   58 Exp: MethodCall .
+
+    $default  reduce using rule 58 (Exp)
+
+
+State 47
+
+   11 VarInit: '=' Exp .
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+
+    TOK_AND       shift, and go to state 61
+    TOK_OR        shift, and go to state 62
+    TOK_LESSEQL   shift, and go to state 63
+    TOK_GREATEQL  shift, and go to state 64
+    TOK_EQUAL     shift, and go to state 65
+    TOK_NOTEQL    shift, and go to state 66
+    '>'           shift, and go to state 67
+    '<'           shift, and go to state 68
+    '+'           shift, and go to state 69
+    '-'           shift, and go to state 70
+    '*'           shift, and go to state 71
+    '/'           shift, and go to state 72
+
+    $default  reduce using rule 11 (VarInit)
+
+
+State 48
+
+   56 Exp: LeftValue . '.' KW_LENGTH
+   57    | LeftValue .
+
+    '.'  shift, and go to state 73
+
+    $default  reduce using rule 57 (Exp)
+
+
+State 49
+
+   10 VarDecl: Type ID VarInit MoreVar . ';'
+   13 MoreVar: MoreVar . ',' ID VarInit
+
+    ';'  shift, and go to state 74
+    ','  shift, and go to state 75
+
+
+State 50
+
+   14 MoreVar: EmptyRule .
+
+    $default  reduce using rule 14 (MoreVar)
+
+
+State 51
+
+    3 MainMethod: KW_PUBLIC KW_STATIC KW_VOID MAIN '(' . KW_STRING '[' ']' ID ')' '{' StatementList '}'
+
+    KW_STRING  shift, and go to state 76
+
+
+State 52
+
+   16 StaticMethodDecl: KW_PUBLIC KW_STATIC Type ID '(' . FormalHead ')' '{' StatementList '}'
+
+    KW_BOOLEAN  shift, and go to state 17
+    KW_INT      shift, and go to state 18
+    KW_STRING   shift, and go to state 19
+
+    $default  reduce using rule 72 (EmptyRule)
+
+    FormalHead  go to state 77
+    FormalList  go to state 78
+    Type        go to state 79
+    PrimeType   go to state 22
+    EmptyRule   go to state 80
+
+
+State 53
+
+   37 MethodCall: INTEGER_PARSEINT '(' . Exp ')'
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 81
+    LeftValue   go to state 48
+
+
+State 54
+
+   59 Exp: KW_NEW PrimeType . Index
+
+    '['  shift, and go to state 82
+
+    Index  go to state 83
+
+
+State 55
+
+   36 MethodCall: ID '(' . ExpHead ')'
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    $default  reduce using rule 72 (EmptyRule)
+
+    MethodCall  go to state 46
+    ExpHead     go to state 84
+    Exp         go to state 85
+    Explist     go to state 86
+    LeftValue   go to state 48
+    EmptyRule   go to state 87
+
+
+State 56
+
+   70 LeftValue: ID '[' . Exp ']'
+   71          | ID '[' . Exp ']' '[' Exp ']'
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 88
+    LeftValue   go to state 48
+
+
+State 57
+
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+   53    | '+' Exp .
+
+    '*'  shift, and go to state 71
+    '/'  shift, and go to state 72
+
+    $default  reduce using rule 53 (Exp)
+
+
+State 58
+
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+   54    | '-' Exp .
+
+    '*'  shift, and go to state 71
+    '/'  shift, and go to state 72
+
+    $default  reduce using rule 54 (Exp)
+
+
+State 59
+
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+   52    | '!' Exp .
+
+    $default  reduce using rule 52 (Exp)
+
+
+State 60
+
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+   55    | '(' Exp . ')'
+
+    TOK_AND       shift, and go to state 61
+    TOK_OR        shift, and go to state 62
+    TOK_LESSEQL   shift, and go to state 63
+    TOK_GREATEQL  shift, and go to state 64
+    TOK_EQUAL     shift, and go to state 65
+    TOK_NOTEQL    shift, and go to state 66
+    '>'           shift, and go to state 67
+    '<'           shift, and go to state 68
+    '+'           shift, and go to state 69
+    '-'           shift, and go to state 70
+    '*'           shift, and go to state 71
+    '/'           shift, and go to state 72
+    ')'           shift, and go to state 89
+
+
+State 61
+
+   40 Exp: Exp TOK_AND . Exp
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 90
+    LeftValue   go to state 48
+
+
+State 62
+
+   41 Exp: Exp TOK_OR . Exp
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 91
+    LeftValue   go to state 48
+
+
+State 63
+
+   44 Exp: Exp TOK_LESSEQL . Exp
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 92
+    LeftValue   go to state 48
+
+
+State 64
+
+   45 Exp: Exp TOK_GREATEQL . Exp
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 93
+    LeftValue   go to state 48
+
+
+State 65
+
+   46 Exp: Exp TOK_EQUAL . Exp
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 94
+    LeftValue   go to state 48
+
+
+State 66
+
+   47 Exp: Exp TOK_NOTEQL . Exp
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 95
+    LeftValue   go to state 48
+
+
+State 67
+
+   43 Exp: Exp '>' . Exp
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 96
+    LeftValue   go to state 48
+
+
+State 68
+
+   42 Exp: Exp '<' . Exp
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 97
+    LeftValue   go to state 48
+
+
+State 69
+
+   48 Exp: Exp '+' . Exp
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 98
+    LeftValue   go to state 48
+
+
+State 70
+
+   49 Exp: Exp '-' . Exp
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 99
+    LeftValue   go to state 48
+
+
+State 71
+
+   50 Exp: Exp '*' . Exp
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 100
+    LeftValue   go to state 48
+
+
+State 72
+
+   51 Exp: Exp '/' . Exp
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 101
+    LeftValue   go to state 48
+
+
+State 73
+
+   56 Exp: LeftValue '.' . KW_LENGTH
+
+    KW_LENGTH  shift, and go to state 102
+
+
+State 74
+
+   10 VarDecl: Type ID VarInit MoreVar ';' .
+
+    $default  reduce using rule 10 (VarDecl)
+
+
+State 75
+
+   13 MoreVar: MoreVar ',' . ID VarInit
+
+    ID  shift, and go to state 103
+
+
+State 76
+
+    3 MainMethod: KW_PUBLIC KW_STATIC KW_VOID MAIN '(' KW_STRING . '[' ']' ID ')' '{' StatementList '}'
+
+    '['  shift, and go to state 104
+
+
+State 77
+
+   16 StaticMethodDecl: KW_PUBLIC KW_STATIC Type ID '(' FormalHead . ')' '{' StatementList '}'
+
+    ')'  shift, and go to state 105
+
+
+State 78
+
+   17 FormalHead: FormalList .
+
+    $default  reduce using rule 17 (FormalHead)
+
+
+State 79
+
+   19 FormalList: Type . ID FormalTail
+   23 Type: Type . '[' ']'
+
+    ID   shift, and go to state 106
+    '['  shift, and go to state 26
+
+
+State 80
+
+   18 FormalHead: EmptyRule .
+
+    $default  reduce using rule 18 (FormalHead)
+
+
+State 81
+
+   37 MethodCall: INTEGER_PARSEINT '(' Exp . ')'
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+
+    TOK_AND       shift, and go to state 61
+    TOK_OR        shift, and go to state 62
+    TOK_LESSEQL   shift, and go to state 63
+    TOK_GREATEQL  shift, and go to state 64
+    TOK_EQUAL     shift, and go to state 65
+    TOK_NOTEQL    shift, and go to state 66
+    '>'           shift, and go to state 67
+    '<'           shift, and go to state 68
+    '+'           shift, and go to state 69
+    '-'           shift, and go to state 70
+    '*'           shift, and go to state 71
+    '/'           shift, and go to state 72
+    ')'           shift, and go to state 107
+
+
+State 82
+
+   64 Index: '[' . Exp ']'
+   65      | '[' . Exp ']' '[' Exp ']'
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 108
+    LeftValue   go to state 48
+
+
+State 83
+
+   59 Exp: KW_NEW PrimeType Index .
+
+    $default  reduce using rule 59 (Exp)
+
+
+State 84
+
+   36 MethodCall: ID '(' ExpHead . ')'
+
+    ')'  shift, and go to state 109
+
+
+State 85
+
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+   66 Explist: Exp . ExpTail
+
+    TOK_AND       shift, and go to state 61
+    TOK_OR        shift, and go to state 62
+    TOK_LESSEQL   shift, and go to state 63
+    TOK_GREATEQL  shift, and go to state 64
+    TOK_EQUAL     shift, and go to state 65
+    TOK_NOTEQL    shift, and go to state 66
+    '>'           shift, and go to state 67
+    '<'           shift, and go to state 68
+    '+'           shift, and go to state 69
+    '-'           shift, and go to state 70
+    '*'           shift, and go to state 71
+    '/'           shift, and go to state 72
+
+    $default  reduce using rule 72 (EmptyRule)
+
+    ExpTail    go to state 110
+    EmptyRule  go to state 111
+
+
+State 86
+
+   38 ExpHead: Explist .
+
+    $default  reduce using rule 38 (ExpHead)
+
+
+State 87
+
+   39 ExpHead: EmptyRule .
+
+    $default  reduce using rule 39 (ExpHead)
+
+
+State 88
+
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+   70 LeftValue: ID '[' Exp . ']'
+   71          | ID '[' Exp . ']' '[' Exp ']'
+
+    TOK_AND       shift, and go to state 61
+    TOK_OR        shift, and go to state 62
+    TOK_LESSEQL   shift, and go to state 63
+    TOK_GREATEQL  shift, and go to state 64
+    TOK_EQUAL     shift, and go to state 65
+    TOK_NOTEQL    shift, and go to state 66
+    '>'           shift, and go to state 67
+    '<'           shift, and go to state 68
+    '+'           shift, and go to state 69
+    '-'           shift, and go to state 70
+    '*'           shift, and go to state 71
+    '/'           shift, and go to state 72
+    ']'           shift, and go to state 112
+
+
+State 89
+
+   55 Exp: '(' Exp ')' .
+
+    $default  reduce using rule 55 (Exp)
+
+
+State 90
+
+   40 Exp: Exp . TOK_AND Exp
+   40    | Exp TOK_AND Exp .
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+
+    TOK_LESSEQL   shift, and go to state 63
+    TOK_GREATEQL  shift, and go to state 64
+    TOK_EQUAL     shift, and go to state 65
+    TOK_NOTEQL    shift, and go to state 66
+    '>'           shift, and go to state 67
+    '<'           shift, and go to state 68
+    '+'           shift, and go to state 69
+    '-'           shift, and go to state 70
+    '*'           shift, and go to state 71
+    '/'           shift, and go to state 72
+
+    $default  reduce using rule 40 (Exp)
+
+
+State 91
+
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   41    | Exp TOK_OR Exp .
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+
+    TOK_AND       shift, and go to state 61
+    TOK_LESSEQL   shift, and go to state 63
+    TOK_GREATEQL  shift, and go to state 64
+    TOK_EQUAL     shift, and go to state 65
+    TOK_NOTEQL    shift, and go to state 66
+    '>'           shift, and go to state 67
+    '<'           shift, and go to state 68
+    '+'           shift, and go to state 69
+    '-'           shift, and go to state 70
+    '*'           shift, and go to state 71
+    '/'           shift, and go to state 72
+
+    $default  reduce using rule 41 (Exp)
+
+
+State 92
+
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   44    | Exp TOK_LESSEQL Exp .
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+
+    '+'  shift, and go to state 69
+    '-'  shift, and go to state 70
+    '*'  shift, and go to state 71
+    '/'  shift, and go to state 72
+
+    $default  reduce using rule 44 (Exp)
+
+
+State 93
+
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   45    | Exp TOK_GREATEQL Exp .
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+
+    '+'  shift, and go to state 69
+    '-'  shift, and go to state 70
+    '*'  shift, and go to state 71
+    '/'  shift, and go to state 72
+
+    $default  reduce using rule 45 (Exp)
+
+
+State 94
+
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   46    | Exp TOK_EQUAL Exp .
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+
+    TOK_LESSEQL   shift, and go to state 63
+    TOK_GREATEQL  shift, and go to state 64
+    '>'           shift, and go to state 67
+    '<'           shift, and go to state 68
+    '+'           shift, and go to state 69
+    '-'           shift, and go to state 70
+    '*'           shift, and go to state 71
+    '/'           shift, and go to state 72
+
+    $default  reduce using rule 46 (Exp)
+
+
+State 95
+
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   47    | Exp TOK_NOTEQL Exp .
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+
+    TOK_LESSEQL   shift, and go to state 63
+    TOK_GREATEQL  shift, and go to state 64
+    '>'           shift, and go to state 67
+    '<'           shift, and go to state 68
+    '+'           shift, and go to state 69
+    '-'           shift, and go to state 70
+    '*'           shift, and go to state 71
+    '/'           shift, and go to state 72
+
+    $default  reduce using rule 47 (Exp)
+
+
+State 96
+
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   43    | Exp '>' Exp .
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+
+    '+'  shift, and go to state 69
+    '-'  shift, and go to state 70
+    '*'  shift, and go to state 71
+    '/'  shift, and go to state 72
+
+    $default  reduce using rule 43 (Exp)
+
+
+State 97
+
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   42    | Exp '<' Exp .
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+
+    '+'  shift, and go to state 69
+    '-'  shift, and go to state 70
+    '*'  shift, and go to state 71
+    '/'  shift, and go to state 72
+
+    $default  reduce using rule 42 (Exp)
+
+
+State 98
+
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   48    | Exp '+' Exp .
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+
+    '*'  shift, and go to state 71
+    '/'  shift, and go to state 72
+
+    $default  reduce using rule 48 (Exp)
+
+
+State 99
+
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   49    | Exp '-' Exp .
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+
+    '*'  shift, and go to state 71
+    '/'  shift, and go to state 72
+
+    $default  reduce using rule 49 (Exp)
+
+
+State 100
+
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   50    | Exp '*' Exp .
+   51    | Exp . '/' Exp
+
+    $default  reduce using rule 50 (Exp)
+
+
+State 101
+
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+   51    | Exp '/' Exp .
+
+    $default  reduce using rule 51 (Exp)
+
+
+State 102
+
+   56 Exp: LeftValue '.' KW_LENGTH .
+
+    $default  reduce using rule 56 (Exp)
+
+
+State 103
+
+   13 MoreVar: MoreVar ',' ID . VarInit
+
+    '='  shift, and go to state 29
+
+    $default  reduce using rule 72 (EmptyRule)
+
+    VarInit    go to state 113
+    EmptyRule  go to state 31
+
+
+State 104
+
+    3 MainMethod: KW_PUBLIC KW_STATIC KW_VOID MAIN '(' KW_STRING '[' . ']' ID ')' '{' StatementList '}'
+
+    ']'  shift, and go to state 114
+
+
+State 105
+
+   16 StaticMethodDecl: KW_PUBLIC KW_STATIC Type ID '(' FormalHead ')' . '{' StatementList '}'
+
+    '{'  shift, and go to state 115
+
+
+State 106
+
+   19 FormalList: Type ID . FormalTail
+
+    ','  shift, and go to state 116
+
+    $default  reduce using rule 72 (EmptyRule)
+
+    FormalTail  go to state 117
+    EmptyRule   go to state 118
+
+
+State 107
+
+   37 MethodCall: INTEGER_PARSEINT '(' Exp ')' .
+
+    $default  reduce using rule 37 (MethodCall)
+
+
+State 108
+
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+   64 Index: '[' Exp . ']'
+   65      | '[' Exp . ']' '[' Exp ']'
+
+    TOK_AND       shift, and go to state 61
+    TOK_OR        shift, and go to state 62
+    TOK_LESSEQL   shift, and go to state 63
+    TOK_GREATEQL  shift, and go to state 64
+    TOK_EQUAL     shift, and go to state 65
+    TOK_NOTEQL    shift, and go to state 66
+    '>'           shift, and go to state 67
+    '<'           shift, and go to state 68
+    '+'           shift, and go to state 69
+    '-'           shift, and go to state 70
+    '*'           shift, and go to state 71
+    '/'           shift, and go to state 72
+    ']'           shift, and go to state 119
+
+
+State 109
+
+   36 MethodCall: ID '(' ExpHead ')' .
+
+    $default  reduce using rule 36 (MethodCall)
+
+
+State 110
+
+   66 Explist: Exp ExpTail .
+   67 ExpTail: ExpTail . ',' Exp
+
+    ','  shift, and go to state 120
+
+    $default  reduce using rule 66 (Explist)
+
+
+State 111
+
+   68 ExpTail: EmptyRule .
+
+    $default  reduce using rule 68 (ExpTail)
+
+
+State 112
+
+   70 LeftValue: ID '[' Exp ']' .
+   71          | ID '[' Exp ']' . '[' Exp ']'
+
+    '['  shift, and go to state 121
+
+    $default  reduce using rule 70 (LeftValue)
+
+
+State 113
+
+   13 MoreVar: MoreVar ',' ID VarInit .
+
+    $default  reduce using rule 13 (MoreVar)
+
+
+State 114
+
+    3 MainMethod: KW_PUBLIC KW_STATIC KW_VOID MAIN '(' KW_STRING '[' ']' . ID ')' '{' StatementList '}'
+
+    ID  shift, and go to state 122
+
+
+State 115
+
+   16 StaticMethodDecl: KW_PUBLIC KW_STATIC Type ID '(' FormalHead ')' '{' . StatementList '}'
+
+    $default  reduce using rule 72 (EmptyRule)
+
+    StatementList  go to state 123
+    EmptyRule      go to state 124
+
+
+State 116
+
+   20 FormalTail: ',' . Type ID FormalTail
+
+    KW_BOOLEAN  shift, and go to state 17
+    KW_INT      shift, and go to state 18
+    KW_STRING   shift, and go to state 19
+
+    Type       go to state 125
+    PrimeType  go to state 22
+
+
+State 117
+
+   19 FormalList: Type ID FormalTail .
+
+    $default  reduce using rule 19 (FormalList)
+
+
+State 118
+
+   21 FormalTail: EmptyRule .
+
+    $default  reduce using rule 21 (FormalTail)
+
+
+State 119
+
+   64 Index: '[' Exp ']' .
+   65      | '[' Exp ']' . '[' Exp ']'
+
+    '['  shift, and go to state 126
+
+    $default  reduce using rule 64 (Index)
+
+
+State 120
+
+   67 ExpTail: ExpTail ',' . Exp
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 127
+    LeftValue   go to state 48
+
+
+State 121
+
+   71 LeftValue: ID '[' Exp ']' '[' . Exp ']'
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 128
+    LeftValue   go to state 48
+
+
+State 122
+
+    3 MainMethod: KW_PUBLIC KW_STATIC KW_VOID MAIN '(' KW_STRING '[' ']' ID . ')' '{' StatementList '}'
+
+    ')'  shift, and go to state 129
+
+
+State 123
+
+    8 StatementList: StatementList . Statement
+   16 StaticMethodDecl: KW_PUBLIC KW_STATIC Type ID '(' FormalHead ')' '{' StatementList . '}'
+
+    KW_BOOLEAN          shift, and go to state 17
+    KW_INT              shift, and go to state 18
+    KW_STRING           shift, and go to state 19
+    SYSTEM_OUT_PRINT    shift, and go to state 130
+    SYSTEM_OUT_PRINTLN  shift, and go to state 131
+    KW_IF               shift, and go to state 132
+    KW_WHILE            shift, and go to state 133
+    KW_RETURN           shift, and go to state 134
+    INTEGER_PARSEINT    shift, and go to state 37
+    ID                  shift, and go to state 41
+    '{'                 shift, and go to state 135
+    '}'                 shift, and go to state 136
+
+    VarDecl     go to state 137
+    Type        go to state 21
+    PrimeType   go to state 22
+    Statement   go to state 138
+    MethodCall  go to state 139
+    LeftValue   go to state 140
+
+
+State 124
+
+    9 StatementList: EmptyRule .
+
+    $default  reduce using rule 9 (StatementList)
+
+
+State 125
+
+   20 FormalTail: ',' Type . ID FormalTail
+   23 Type: Type . '[' ']'
+
+    ID   shift, and go to state 141
+    '['  shift, and go to state 26
+
+
+State 126
+
+   65 Index: '[' Exp ']' '[' . Exp ']'
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 142
+    LeftValue   go to state 48
+
+
+State 127
+
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+   67 ExpTail: ExpTail ',' Exp .
+
+    TOK_AND       shift, and go to state 61
+    TOK_OR        shift, and go to state 62
+    TOK_LESSEQL   shift, and go to state 63
+    TOK_GREATEQL  shift, and go to state 64
+    TOK_EQUAL     shift, and go to state 65
+    TOK_NOTEQL    shift, and go to state 66
+    '>'           shift, and go to state 67
+    '<'           shift, and go to state 68
+    '+'           shift, and go to state 69
+    '-'           shift, and go to state 70
+    '*'           shift, and go to state 71
+    '/'           shift, and go to state 72
+
+    $default  reduce using rule 67 (ExpTail)
+
+
+State 128
+
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+   71 LeftValue: ID '[' Exp ']' '[' Exp . ']'
+
+    TOK_AND       shift, and go to state 61
+    TOK_OR        shift, and go to state 62
+    TOK_LESSEQL   shift, and go to state 63
+    TOK_GREATEQL  shift, and go to state 64
+    TOK_EQUAL     shift, and go to state 65
+    TOK_NOTEQL    shift, and go to state 66
+    '>'           shift, and go to state 67
+    '<'           shift, and go to state 68
+    '+'           shift, and go to state 69
+    '-'           shift, and go to state 70
+    '*'           shift, and go to state 71
+    '/'           shift, and go to state 72
+    ']'           shift, and go to state 143
+
+
+State 129
+
+    3 MainMethod: KW_PUBLIC KW_STATIC KW_VOID MAIN '(' KW_STRING '[' ']' ID ')' . '{' StatementList '}'
+
+    '{'  shift, and go to state 144
+
+
+State 130
+
+   32 Statement: SYSTEM_OUT_PRINT . '(' Exp ')' ';'
+
+    '('  shift, and go to state 145
+
+
+State 131
+
+   31 Statement: SYSTEM_OUT_PRINTLN . '(' Exp ')' ';'
+
+    '('  shift, and go to state 146
+
+
+State 132
+
+   29 Statement: KW_IF . '(' Exp ')' Statement KW_ELSE Statement
+
+    '('  shift, and go to state 147
+
+
+State 133
+
+   30 Statement: KW_WHILE . '(' Exp ')' Statement
+
+    '('  shift, and go to state 148
+
+
+State 134
+
+   34 Statement: KW_RETURN . Exp ';'
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 149
+    LeftValue   go to state 48
+
+
+State 135
+
+   28 Statement: '{' . StatementList '}'
+
+    $default  reduce using rule 72 (EmptyRule)
+
+    StatementList  go to state 150
+    EmptyRule      go to state 124
+
+
+State 136
+
+   16 StaticMethodDecl: KW_PUBLIC KW_STATIC Type ID '(' FormalHead ')' '{' StatementList '}' .
+
+    $default  reduce using rule 16 (StaticMethodDecl)
+
+
+State 137
+
+   27 Statement: VarDecl .
+
+    $default  reduce using rule 27 (Statement)
+
+
+State 138
+
+    8 StatementList: StatementList Statement .
+
+    $default  reduce using rule 8 (StatementList)
+
+
+State 139
+
+   35 Statement: MethodCall . ';'
+
+    ';'  shift, and go to state 151
+
+
+State 140
+
+   33 Statement: LeftValue . '=' Exp ';'
+
+    '='  shift, and go to state 152
+
+
+State 141
+
+   20 FormalTail: ',' Type ID . FormalTail
+
+    ','  shift, and go to state 116
+
+    $default  reduce using rule 72 (EmptyRule)
+
+    FormalTail  go to state 153
+    EmptyRule   go to state 118
+
+
+State 142
+
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+   65 Index: '[' Exp ']' '[' Exp . ']'
+
+    TOK_AND       shift, and go to state 61
+    TOK_OR        shift, and go to state 62
+    TOK_LESSEQL   shift, and go to state 63
+    TOK_GREATEQL  shift, and go to state 64
+    TOK_EQUAL     shift, and go to state 65
+    TOK_NOTEQL    shift, and go to state 66
+    '>'           shift, and go to state 67
+    '<'           shift, and go to state 68
+    '+'           shift, and go to state 69
+    '-'           shift, and go to state 70
+    '*'           shift, and go to state 71
+    '/'           shift, and go to state 72
+    ']'           shift, and go to state 154
+
+
+State 143
+
+   71 LeftValue: ID '[' Exp ']' '[' Exp ']' .
+
+    $default  reduce using rule 71 (LeftValue)
+
+
+State 144
+
+    3 MainMethod: KW_PUBLIC KW_STATIC KW_VOID MAIN '(' KW_STRING '[' ']' ID ')' '{' . StatementList '}'
+
+    $default  reduce using rule 72 (EmptyRule)
+
+    StatementList  go to state 155
+    EmptyRule      go to state 124
+
+
+State 145
+
+   32 Statement: SYSTEM_OUT_PRINT '(' . Exp ')' ';'
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 156
+    LeftValue   go to state 48
+
+
+State 146
+
+   31 Statement: SYSTEM_OUT_PRINTLN '(' . Exp ')' ';'
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 157
+    LeftValue   go to state 48
+
+
+State 147
+
+   29 Statement: KW_IF '(' . Exp ')' Statement KW_ELSE Statement
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 158
+    LeftValue   go to state 48
+
+
+State 148
+
+   30 Statement: KW_WHILE '(' . Exp ')' Statement
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 159
+    LeftValue   go to state 48
+
+
+State 149
+
+   34 Statement: KW_RETURN Exp . ';'
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+
+    TOK_AND       shift, and go to state 61
+    TOK_OR        shift, and go to state 62
+    TOK_LESSEQL   shift, and go to state 63
+    TOK_GREATEQL  shift, and go to state 64
+    TOK_EQUAL     shift, and go to state 65
+    TOK_NOTEQL    shift, and go to state 66
+    '>'           shift, and go to state 67
+    '<'           shift, and go to state 68
+    '+'           shift, and go to state 69
+    '-'           shift, and go to state 70
+    '*'           shift, and go to state 71
+    '/'           shift, and go to state 72
+    ';'           shift, and go to state 160
+
+
+State 150
+
+    8 StatementList: StatementList . Statement
+   28 Statement: '{' StatementList . '}'
+
+    KW_BOOLEAN          shift, and go to state 17
+    KW_INT              shift, and go to state 18
+    KW_STRING           shift, and go to state 19
+    SYSTEM_OUT_PRINT    shift, and go to state 130
+    SYSTEM_OUT_PRINTLN  shift, and go to state 131
+    KW_IF               shift, and go to state 132
+    KW_WHILE            shift, and go to state 133
+    KW_RETURN           shift, and go to state 134
+    INTEGER_PARSEINT    shift, and go to state 37
+    ID                  shift, and go to state 41
+    '{'                 shift, and go to state 135
+    '}'                 shift, and go to state 161
+
+    VarDecl     go to state 137
+    Type        go to state 21
+    PrimeType   go to state 22
+    Statement   go to state 138
+    MethodCall  go to state 139
+    LeftValue   go to state 140
+
+
+State 151
+
+   35 Statement: MethodCall ';' .
+
+    $default  reduce using rule 35 (Statement)
+
+
+State 152
+
+   33 Statement: LeftValue '=' . Exp ';'
+
+    KW_FALSE          shift, and go to state 35
+    KW_TRUE           shift, and go to state 36
+    INTEGER_PARSEINT  shift, and go to state 37
+    KW_NEW            shift, and go to state 38
+    INTEGER_LITERAL   shift, and go to state 39
+    STRING_LITERAL    shift, and go to state 40
+    ID                shift, and go to state 41
+    '+'               shift, and go to state 42
+    '-'               shift, and go to state 43
+    '!'               shift, and go to state 44
+    '('               shift, and go to state 45
+
+    MethodCall  go to state 46
+    Exp         go to state 162
+    LeftValue   go to state 48
+
+
+State 153
+
+   20 FormalTail: ',' Type ID FormalTail .
+
+    $default  reduce using rule 20 (FormalTail)
+
+
+State 154
+
+   65 Index: '[' Exp ']' '[' Exp ']' .
+
+    $default  reduce using rule 65 (Index)
+
+
+State 155
+
+    3 MainMethod: KW_PUBLIC KW_STATIC KW_VOID MAIN '(' KW_STRING '[' ']' ID ')' '{' StatementList . '}'
+    8 StatementList: StatementList . Statement
+
+    KW_BOOLEAN          shift, and go to state 17
+    KW_INT              shift, and go to state 18
+    KW_STRING           shift, and go to state 19
+    SYSTEM_OUT_PRINT    shift, and go to state 130
+    SYSTEM_OUT_PRINTLN  shift, and go to state 131
+    KW_IF               shift, and go to state 132
+    KW_WHILE            shift, and go to state 133
+    KW_RETURN           shift, and go to state 134
+    INTEGER_PARSEINT    shift, and go to state 37
+    ID                  shift, and go to state 41
+    '{'                 shift, and go to state 135
+    '}'                 shift, and go to state 163
+
+    VarDecl     go to state 137
+    Type        go to state 21
+    PrimeType   go to state 22
+    Statement   go to state 138
+    MethodCall  go to state 139
+    LeftValue   go to state 140
+
+
+State 156
+
+   32 Statement: SYSTEM_OUT_PRINT '(' Exp . ')' ';'
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+
+    TOK_AND       shift, and go to state 61
+    TOK_OR        shift, and go to state 62
+    TOK_LESSEQL   shift, and go to state 63
+    TOK_GREATEQL  shift, and go to state 64
+    TOK_EQUAL     shift, and go to state 65
+    TOK_NOTEQL    shift, and go to state 66
+    '>'           shift, and go to state 67
+    '<'           shift, and go to state 68
+    '+'           shift, and go to state 69
+    '-'           shift, and go to state 70
+    '*'           shift, and go to state 71
+    '/'           shift, and go to state 72
+    ')'           shift, and go to state 164
+
+
+State 157
+
+   31 Statement: SYSTEM_OUT_PRINTLN '(' Exp . ')' ';'
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+
+    TOK_AND       shift, and go to state 61
+    TOK_OR        shift, and go to state 62
+    TOK_LESSEQL   shift, and go to state 63
+    TOK_GREATEQL  shift, and go to state 64
+    TOK_EQUAL     shift, and go to state 65
+    TOK_NOTEQL    shift, and go to state 66
+    '>'           shift, and go to state 67
+    '<'           shift, and go to state 68
+    '+'           shift, and go to state 69
+    '-'           shift, and go to state 70
+    '*'           shift, and go to state 71
+    '/'           shift, and go to state 72
+    ')'           shift, and go to state 165
+
+
+State 158
+
+   29 Statement: KW_IF '(' Exp . ')' Statement KW_ELSE Statement
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+
+    TOK_AND       shift, and go to state 61
+    TOK_OR        shift, and go to state 62
+    TOK_LESSEQL   shift, and go to state 63
+    TOK_GREATEQL  shift, and go to state 64
+    TOK_EQUAL     shift, and go to state 65
+    TOK_NOTEQL    shift, and go to state 66
+    '>'           shift, and go to state 67
+    '<'           shift, and go to state 68
+    '+'           shift, and go to state 69
+    '-'           shift, and go to state 70
+    '*'           shift, and go to state 71
+    '/'           shift, and go to state 72
+    ')'           shift, and go to state 166
+
+
+State 159
+
+   30 Statement: KW_WHILE '(' Exp . ')' Statement
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+
+    TOK_AND       shift, and go to state 61
+    TOK_OR        shift, and go to state 62
+    TOK_LESSEQL   shift, and go to state 63
+    TOK_GREATEQL  shift, and go to state 64
+    TOK_EQUAL     shift, and go to state 65
+    TOK_NOTEQL    shift, and go to state 66
+    '>'           shift, and go to state 67
+    '<'           shift, and go to state 68
+    '+'           shift, and go to state 69
+    '-'           shift, and go to state 70
+    '*'           shift, and go to state 71
+    '/'           shift, and go to state 72
+    ')'           shift, and go to state 167
+
+
+State 160
+
+   34 Statement: KW_RETURN Exp ';' .
+
+    $default  reduce using rule 34 (Statement)
+
+
+State 161
+
+   28 Statement: '{' StatementList '}' .
+
+    $default  reduce using rule 28 (Statement)
+
+
+State 162
+
+   33 Statement: LeftValue '=' Exp . ';'
+   40 Exp: Exp . TOK_AND Exp
+   41    | Exp . TOK_OR Exp
+   42    | Exp . '<' Exp
+   43    | Exp . '>' Exp
+   44    | Exp . TOK_LESSEQL Exp
+   45    | Exp . TOK_GREATEQL Exp
+   46    | Exp . TOK_EQUAL Exp
+   47    | Exp . TOK_NOTEQL Exp
+   48    | Exp . '+' Exp
+   49    | Exp . '-' Exp
+   50    | Exp . '*' Exp
+   51    | Exp . '/' Exp
+
+    TOK_AND       shift, and go to state 61
+    TOK_OR        shift, and go to state 62
+    TOK_LESSEQL   shift, and go to state 63
+    TOK_GREATEQL  shift, and go to state 64
+    TOK_EQUAL     shift, and go to state 65
+    TOK_NOTEQL    shift, and go to state 66
+    '>'           shift, and go to state 67
+    '<'           shift, and go to state 68
+    '+'           shift, and go to state 69
+    '-'           shift, and go to state 70
+    '*'           shift, and go to state 71
+    '/'           shift, and go to state 72
+    ';'           shift, and go to state 168
+
+
+State 163
+
+    3 MainMethod: KW_PUBLIC KW_STATIC KW_VOID MAIN '(' KW_STRING '[' ']' ID ')' '{' StatementList '}' .
+
+    $default  reduce using rule 3 (MainMethod)
+
+
+State 164
+
+   32 Statement: SYSTEM_OUT_PRINT '(' Exp ')' . ';'
+
+    ';'  shift, and go to state 169
+
+
+State 165
+
+   31 Statement: SYSTEM_OUT_PRINTLN '(' Exp ')' . ';'
+
+    ';'  shift, and go to state 170
+
+
+State 166
+
+   29 Statement: KW_IF '(' Exp ')' . Statement KW_ELSE Statement
+
+    KW_BOOLEAN          shift, and go to state 17
+    KW_INT              shift, and go to state 18
+    KW_STRING           shift, and go to state 19
+    SYSTEM_OUT_PRINT    shift, and go to state 130
+    SYSTEM_OUT_PRINTLN  shift, and go to state 131
+    KW_IF               shift, and go to state 132
+    KW_WHILE            shift, and go to state 133
+    KW_RETURN           shift, and go to state 134
+    INTEGER_PARSEINT    shift, and go to state 37
+    ID                  shift, and go to state 41
+    '{'                 shift, and go to state 135
+
+    VarDecl     go to state 137
+    Type        go to state 21
+    PrimeType   go to state 22
+    Statement   go to state 171
+    MethodCall  go to state 139
+    LeftValue   go to state 140
+
+
+State 167
+
+   30 Statement: KW_WHILE '(' Exp ')' . Statement
+
+    KW_BOOLEAN          shift, and go to state 17
+    KW_INT              shift, and go to state 18
+    KW_STRING           shift, and go to state 19
+    SYSTEM_OUT_PRINT    shift, and go to state 130
+    SYSTEM_OUT_PRINTLN  shift, and go to state 131
+    KW_IF               shift, and go to state 132
+    KW_WHILE            shift, and go to state 133
+    KW_RETURN           shift, and go to state 134
+    INTEGER_PARSEINT    shift, and go to state 37
+    ID                  shift, and go to state 41
+    '{'                 shift, and go to state 135
+
+    VarDecl     go to state 137
+    Type        go to state 21
+    PrimeType   go to state 22
+    Statement   go to state 172
+    MethodCall  go to state 139
+    LeftValue   go to state 140
+
+
+State 168
+
+   33 Statement: LeftValue '=' Exp ';' .
+
+    $default  reduce using rule 33 (Statement)
+
+
+State 169
+
+   32 Statement: SYSTEM_OUT_PRINT '(' Exp ')' ';' .
+
+    $default  reduce using rule 32 (Statement)
+
+
+State 170
+
+   31 Statement: SYSTEM_OUT_PRINTLN '(' Exp ')' ';' .
+
+    $default  reduce using rule 31 (Statement)
+
+
+State 171
+
+   29 Statement: KW_IF '(' Exp ')' Statement . KW_ELSE Statement
+
+    KW_ELSE  shift, and go to state 173
+
+
+State 172
+
+   30 Statement: KW_WHILE '(' Exp ')' Statement .
+
+    $default  reduce using rule 30 (Statement)
+
+
+State 173
+
+   29 Statement: KW_IF '(' Exp ')' Statement KW_ELSE . Statement
+
+    KW_BOOLEAN          shift, and go to state 17
+    KW_INT              shift, and go to state 18
+    KW_STRING           shift, and go to state 19
+    SYSTEM_OUT_PRINT    shift, and go to state 130
+    SYSTEM_OUT_PRINTLN  shift, and go to state 131
+    KW_IF               shift, and go to state 132
+    KW_WHILE            shift, and go to state 133
+    KW_RETURN           shift, and go to state 134
+    INTEGER_PARSEINT    shift, and go to state 37
+    ID                  shift, and go to state 41
+    '{'                 shift, and go to state 135
+
+    VarDecl     go to state 137
+    Type        go to state 21
+    PrimeType   go to state 22
+    Statement   go to state 174
+    MethodCall  go to state 139
+    LeftValue   go to state 140
+
+
+State 174
+
+   29 Statement: KW_IF '(' Exp ')' Statement KW_ELSE Statement .
+
+    $default  reduce using rule 29 (Statement)
